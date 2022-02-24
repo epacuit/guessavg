@@ -43,13 +43,18 @@ if showing_results:
 
     password = st.sidebar.text_input("Show results", type="password")
     guess_round = st.sidebar.selectbox('Round',
-        ('Round 1', 'Round 2'), disabled = password != the_password)
-    document = db.find_one({"game_name": "Guess the average", "round": guess_round})
+        ('Round 1', 'Round 2', 'Both'), disabled = password != the_password)
+    document = None
+    if guess_round == 'Both': 
+        document_r1 = db.find_one({"game_name": "Guess the average", "round": 'Round 1'})
+        document_r2 = db.find_one({"game_name": "Guess the average", "round": 'Round 2'})
+    else: 
+        document = db.find_one({"game_name": "Guess the average", "round": guess_round})
     if document is not None and password == the_password:
         st.sidebar.write(f"{'1 person has ' if len(document['guesses']) == 1 else str(len(document['guesses'])) + ' people have '} submitted a guess.")
-    show_results = st.sidebar.button("Show Results", disabled=password != the_password)
-
-if showing_results and show_results: 
+    show_results = st.sidebar.button("Show", disabled=password != the_password)
+    
+if showing_results and show_results and guess_round in ['Round 1', 'Round 2']: 
 
     guesses = document["guesses"]
 
@@ -69,6 +74,31 @@ if showing_results and show_results:
 
 
     st.altair_chart(c, use_container_width=True)
+
+if showing_results and show_results and guess_round in ['Both']: 
+    guesses_r1 = document_r1["guesses"]
+    guesses_r2 = document_r2["guesses"]
+
+    two_thirds_average_r1 = float(2.0) / float(3.0) * np.average([ng["guess"] for ng in guesses_r1])
+    two_thirds_average_r2 = float(2.0) / float(3.0) * np.average([ng["guess"] for ng in guesses_r2])
+    distances_r1 = [math.fabs(ng["guess"] - two_thirds_average_r1) for ng in guesses_r1]
+    min_dist_r1 = min(distances_r1)
+    distances_r2 = [math.fabs(ng["guess"] - two_thirds_average_r2) for ng in guesses_r2]
+    min_dist_r2 = min(distances_r2)
+    st.write(f"2/3 of the average of the guesses for Round 1 is **{two_thirds_average_r1}**")
+    st.write(f"2/3 of the average of the guesses for Round 2 is **{two_thirds_average_r2}**")
+    df = pd.DataFrame({
+        'num': list(range(1, len(guesses_r1) + 1)) + list(range(1, len(guesses_r2) + 1)),
+        'guess': [ng["guess"] for ng in guesses_r1] + [ng["guess"] for ng in guesses_r2],
+        'name': [ng["name"] for ng in guesses_r1] + [ng["name"] for ng in guesses_r2],
+        'round': ['Round 1' for _ in guesses_r1] + ['Round 2' for _ in guesses_r2],
+        })
+    c = alt.Chart(df).mark_circle(size=200).encode(
+        x=alt.X('num', axis=alt.Axis(labels=False, title='')), y='guess', color='round', tooltip=["name", 'guess'])
+
+
+    st.altair_chart(c, use_container_width=True)
+   
 
 if not showing_results and round in ['Round 1', 'Round 2']:
     guess_submitted = False
