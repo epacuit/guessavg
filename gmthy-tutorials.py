@@ -102,19 +102,35 @@ if showing_results and show_results and guess_round in ['Both']:
     sorted_guesses_r1 = sorted(guesses_r1, key = lambda ng : ng["name"])
     sorted_guesses_r2 = sorted(guesses_r2, key = lambda ng : ng["name"])
 
-    # match guesses by name
-    all_guesses = [(ng1['guess'],  ng2['guess']) for ng1 in guesses_r1 for ng2 in guesses_r2 if ng2["name"] == ng1["name"]]
+    # Match guesses by name
+    all_guesses = [(ng1['guess'], ng2['guess']) for ng1 in guesses_r1 for ng2 in guesses_r2 if ng2["name"] == ng1["name"]]
 
+    # Create the DataFrame
     df2 = pd.DataFrame({
         'num': list(range(1, len(all_guesses) + 1)),
-        'diff':  [ngs[0] - ngs[1] for ngs in all_guesses],
-        })
-    #st.write(df2)
+        'diff': [ngs[0] - ngs[1] for ngs in all_guesses],
+    })
+
+    # Sort the DataFrame by 'diff'
+    df2 = df2.sort_values(by='diff').reset_index(drop=True)
+    df2['num'] = df2.index + 1  # Reassign 'num' to reflect the sorted order
+
+    # Create the line chart
     c2 = alt.Chart(df2).mark_line().encode(
-    x=alt.X('num', axis=alt.Axis(labels=False, title='')), y='diff')
+        x=alt.X('num', axis=alt.Axis(labels=False, title='')),
+        y=alt.Y('diff', title='Difference')
+    )
 
+    # Add a red line at y=0
+    rule = alt.Chart(pd.DataFrame({'y': [0]})).mark_rule(color='red', strokeWidth=2).encode(
+        y='y'
+    )
 
-    st.altair_chart(c2, use_container_width=True)
+    # Combine the line chart and the rule
+    final_chart = c2 + rule
+
+    # Display the chart
+    st.altair_chart(final_chart, use_container_width=True)
 
 if not showing_results and round in ['Round 1', 'Round 2']:
     guess_submitted = False
