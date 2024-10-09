@@ -11,7 +11,7 @@ st.write("Guess a number between 1 and 100.   The number closest to 2/3 of the a
 
 the_password = st.secrets.admin_pwd
 
-query_params = st.query_params()
+query_params = st.query_params
 
 def isfloat(num):
     try:
@@ -101,6 +101,7 @@ if showing_results and show_results and guess_round in ['Both']:
     
     sorted_guesss_r1 = sorted(guesses_r1, key = lambda ng : ng["name"])
     sorted_guesss_r2 = sorted(guesses_r2, key = lambda ng : ng["name"])
+
     df2 = pd.DataFrame({
         'num': list(range(1, len(guesses_r1) + 1)),
         'guess': [ng1["guess"] - ng2["guess"] for ng1, ng2 in zip(sorted_guesss_r1, sorted_guesss_r2)],
