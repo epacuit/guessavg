@@ -110,7 +110,7 @@ if showing_results and show_results and guess_round in ['Both']:
         'diff':  [ngs[0] - ngs[1] for ngs in all_guesses],
         })
     #st.write(df2)
-    c2 = alt.Chart(df2).mark_line.encode(
+    c2 = alt.Chart(df2).mark_line().encode(
     x=alt.X('num', axis=alt.Axis(labels=False, title='')), y='diff')
 
 
