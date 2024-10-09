@@ -99,7 +99,7 @@ if showing_results and show_results and guess_round in ['Both']:
 
     st.altair_chart(c, use_container_width=True)
     
-    st.header("Difference between round 2 guess and round 1 guess")
+    st.subheader("Difference between round 2 guess and round 1 guess")
     sorted_guesses_r1 = sorted(guesses_r1, key = lambda ng : ng["name"])
     sorted_guesses_r2 = sorted(guesses_r2, key = lambda ng : ng["name"])
 
