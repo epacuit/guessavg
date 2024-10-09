@@ -62,7 +62,7 @@ if showing_results and show_results and guess_round in ['Round 1', 'Round 2']:
     two_thirds_average = float(2.0) / float(3.0) * np.average([ng["guess"] for ng in guesses])
     distances = [math.fabs(ng["guess"] - two_thirds_average) for ng in guesses]
     min_dist = min(distances)
-    st.write(f"2/3 of the average of the guesses is **{two_thirds_average}**")
+    st.write(f"{guess_round}: 2/3 of the average of the guesses is **{two_thirds_average}**")
     df = pd.DataFrame({
         'num': list(range(1, len(guesses) + 1)),
         'guess': [ng["guess"] for ng in guesses],
@@ -135,6 +135,8 @@ if showing_results and show_results and guess_round in ['Both']:
 
 if not showing_results and round in ['Round 1', 'Round 2']:
     guess_submitted = False
+
+    st.subheader(f"Submit your guess for {round}")
     name = st.text_input("Name")
 
     
