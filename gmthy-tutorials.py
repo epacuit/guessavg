@@ -99,6 +99,13 @@ if showing_results and show_results and guess_round in ['Both']:
 
     st.altair_chart(c, use_container_width=True)
    
+   df2 = pd.DataFrame({
+        'num': list(range(1, len(guesses_r1) + 1)),
+        'guess': [ng1["guess"] = ng2["guess"] for ng1, ng2 in zip(guesses_r1, guesses_r2)],
+        'name1': [ng["name"] for ng in guesses_r1], 
+        'name2': [ng["name"] for ng in guesses_r2],
+        })
+    st.write(df2)
 
 if not showing_results and round in ['Round 1', 'Round 2']:
     guess_submitted = False
