@@ -102,11 +102,12 @@ if showing_results and show_results and guess_round in ['Both']:
     sorted_guesses_r1 = sorted(guesses_r1, key = lambda ng : ng["name"])
     sorted_guesses_r2 = sorted(guesses_r2, key = lambda ng : ng["name"])
 
-    all_guesses = ()
+    # match guesses by name
+    all_guesses = [(ng1['guess'],  ng2['guess']) for ng1 in guesses_r1 for ng2 in guesses_r2 if ng2["name"] == ng1["name"]]
+
     df2 = pd.DataFrame({
-        'num': list(range(1, len(guesses_r1) + 1)),
-        'guess': [ng1["guess"] - [ng2 for ng2 in guesses_r2 if ng2["name"] == ng1["name"]][0]["guess"] for ng1 in guesses_r1],
-        'name1': [ng["name"] for ng in guesses_r1], 
+        'num': list(range(1, len(all_guesses) + 1)),
+        'diff':  [ngs[0] - ngs[1] for ngs in all_guesses],
         })
     st.write(df2)
 
