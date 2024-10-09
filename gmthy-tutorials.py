@@ -99,6 +99,7 @@ if showing_results and show_results and guess_round in ['Both']:
 
     st.altair_chart(c, use_container_width=True)
     
+    st.subtitle("Difference between round 2 guess and round 1 guess")
     sorted_guesses_r1 = sorted(guesses_r1, key = lambda ng : ng["name"])
     sorted_guesses_r2 = sorted(guesses_r2, key = lambda ng : ng["name"])
 
@@ -108,7 +109,7 @@ if showing_results and show_results and guess_round in ['Both']:
     # Create the DataFrame
     df2 = pd.DataFrame({
         'num': list(range(1, len(all_guesses) + 1)),
-        'diff': [ngs[0] - ngs[1] for ngs in all_guesses],
+        'diff': [ngs[1] - ngs[0] for ngs in all_guesses],
     })
 
     # Sort the DataFrame by 'diff'
