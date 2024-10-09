@@ -109,7 +109,12 @@ if showing_results and show_results and guess_round in ['Both']:
         'num': list(range(1, len(all_guesses) + 1)),
         'diff':  [ngs[0] - ngs[1] for ngs in all_guesses],
         })
-    st.write(df2)
+    #st.write(df2)
+    c2 = alt.Chart(df2).mark_line(size=100).encode(
+    x=alt.X('num', axis=alt.Axis(labels=False, title='')), y='diff')
+
+
+    st.altair_chart(c2, use_container_width=True)
 
 if not showing_results and round in ['Round 1', 'Round 2']:
     guess_submitted = False
