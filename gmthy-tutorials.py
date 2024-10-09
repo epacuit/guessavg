@@ -105,7 +105,7 @@ if showing_results and show_results and guess_round in ['Both']:
     all_guesses = ()
     df2 = pd.DataFrame({
         'num': list(range(1, len(guesses_r1) + 1)),
-        'guess': [ng1["guess"] - [ng2 for ng2 in sorted_guess_r2 if ng2["name"] == ng1["name"]][0]["guess"] for ng1 in sorted_guesss_r1],
+        'guess': [ng1["guess"] - [ng2 for ng2 in sorted_guess_r2 if ng2["name"] == ng1["name"]][0]["guess"] for ng1 in sorted_guesses_r1],
         'name1': [ng["name"] for ng in sorted_guesses_r1], 
         })
     st.write(df2)
